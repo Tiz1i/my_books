@@ -322,47 +322,50 @@ namespace my_books.Data.Services
             return list;
         }
 
-        //public async Task<List<BookExel>> UploadBookExel(IFormFile file)
-        //{
-        //    var list = new List<BookExel>();
-        //    using (var stream = new MemoryStream())
-        //    {
-        //        await file.CopyToAsync(stream);
-        //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        //Menyra e pare me foreach//
+        public async Task<List<BookExel>> UploadBookExel(IFormFile file)
+        {
+            var list = new List<BookExel>();
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        //        using (var package = new ExcelPackage(stream))
-        //        {
-        //            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-        //            var rowcount = worksheet.Dimension.Rows;
-        //            for (int row = 1; row <= rowcount - 1; row++)
-        //            {
-        //                if (row != 1)
-        //                {
-        //                    list.Add(new BookExel
-        //                    {
-        //                        Title = Convert.ToString(worksheet.Cells[row, 1].Value),
-        //                        Description = Convert.ToString(worksheet.Cells[row, 2].Value),
-        //                        Genre = Convert.ToString(worksheet.Cells[row, 3].Value),
-        //                        IsRead = Convert.ToBoolean(worksheet.Cells[row, 4].Value),
-        //                        DateRead = Convert.ToDateTime(worksheet.Cells[row, 5].Value),
-        //                        Rate = Convert.ToInt32(worksheet.Cells[row, 6].Value),
-        //                        DateAdded = Convert.ToDateTime(worksheet.Cells[row, 7].Value),
-        //                        CoverUrl = Convert.ToString(worksheet.Cells[row, 8].Value),
-        //                        PublisherId = Convert.ToInt32(worksheet.Cells[row, 9].Value),
-        //                    });
-        //                }
-        //            }
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var rowcount = worksheet.Dimension.Rows;
+                    for (int row = 1; row <= rowcount - 1; row++)
+                    {
+                        if (row != 1)
+                        {
+                            list.Add(new BookExel
+                            {
+                                Title = Convert.ToString(worksheet.Cells[row, 1].Value),
+                                Description = Convert.ToString(worksheet.Cells[row, 2].Value),
+                                Genre = Convert.ToString(worksheet.Cells[row, 3].Value),
+                                IsRead = Convert.ToBoolean(worksheet.Cells[row, 4].Value),
+                                DateRead = Convert.ToDateTime(worksheet.Cells[row, 5].Value),
+                                Rate = Convert.ToInt32(worksheet.Cells[row, 6].Value),
+                                DateAdded = Convert.ToDateTime(worksheet.Cells[row, 7].Value),
+                                CoverUrl = Convert.ToString(worksheet.Cells[row, 8].Value),
+                                PublisherId = Convert.ToInt32(worksheet.Cells[row, 9].Value),
+                            });
+                        }
+                    }
 
-        //            foreach (var item in list)
-        //            {
-        //                var book = _mapper.Map<Book>(item);
-        //                _context.Books.Add(book);
-        //                _context.SaveChanges();
-        //            }
-        //        }
-        //    }
-        //    return list;
-        //}
+                    foreach (var item in list)
+                    {
+                        var book = _mapper.Map<Book>(item);
+                        _context.Books.Add(book);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            return list;
+        }
+
+        //Menyra e dyte me objekt//
         public async Task<List<BookExel>> UploadDataBookExel(IFormFile file)
         {
             var list = new List<BookExel>();
