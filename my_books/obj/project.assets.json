@@ -10479,11 +10479,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\source\\repos\\Mybook_web_api\\my_books\\my_books.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\Mybook_web_api\\my_books\\my_books.csproj",
       "projectName": "my_books",
-      "projectPath": "C:\\Users\\User\\source\\repos\\Mybook_web_api\\my_books\\my_books.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\Mybook_web_api\\my_books\\my_books.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\source\\repos\\Mybook_web_api\\my_books\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\Mybook_web_api\\my_books\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

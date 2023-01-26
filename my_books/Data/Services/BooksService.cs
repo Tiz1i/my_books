@@ -132,6 +132,11 @@ namespace my_books.Data.Services
             return _bookWithAuthors;
         }
 
+        internal Task UploadDataExelBook(IFormFile file)
+        {
+            throw new NotImplementedException();
+        }
+
         public ActionResult<BookWithAuthorsVM> GetAllBooksByIdByMapp(int bookId)
         {
             var _bookWithAuthors = _context.Books.Where(n => n.Id == bookId).FirstOrDefault();
@@ -308,7 +313,7 @@ namespace my_books.Data.Services
                     }
                     foreach (var item in list)
                     {
-                        _context.Exels.Add(item);
+                        _context.BookExel.Add(item);
                         _context.SaveChanges();
                     }
 
@@ -317,10 +322,50 @@ namespace my_books.Data.Services
             return list;
         }
 
-        public async Task<List<BookEcxel>> UploadDataExelBook(IFormFile file)
-        {
+        //public async Task<List<BookExel>> UploadBookExel(IFormFile file)
+        //{
+        //    var list = new List<BookExel>();
+        //    using (var stream = new MemoryStream())
+        //    {
+        //        await file.CopyToAsync(stream);
+        //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-            var list = new List<Book>();
+        //        using (var package = new ExcelPackage(stream))
+        //        {
+        //            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+        //            var rowcount = worksheet.Dimension.Rows;
+        //            for (int row = 1; row <= rowcount - 1; row++)
+        //            {
+        //                if (row != 1)
+        //                {
+        //                    list.Add(new BookExel
+        //                    {
+        //                        Title = Convert.ToString(worksheet.Cells[row, 1].Value),
+        //                        Description = Convert.ToString(worksheet.Cells[row, 2].Value),
+        //                        Genre = Convert.ToString(worksheet.Cells[row, 3].Value),
+        //                        IsRead = Convert.ToBoolean(worksheet.Cells[row, 4].Value),
+        //                        DateRead = Convert.ToDateTime(worksheet.Cells[row, 5].Value),
+        //                        Rate = Convert.ToInt32(worksheet.Cells[row, 6].Value),
+        //                        DateAdded = Convert.ToDateTime(worksheet.Cells[row, 7].Value),
+        //                        CoverUrl = Convert.ToString(worksheet.Cells[row, 8].Value),
+        //                        PublisherId = Convert.ToInt32(worksheet.Cells[row, 9].Value),
+        //                    });
+        //                }
+        //            }
+
+        //            foreach (var item in list)
+        //            {
+        //                var book = _mapper.Map<Book>(item);
+        //                _context.Books.Add(book);
+        //                _context.SaveChanges();
+        //            }
+        //        }
+        //    }
+        //    return list;
+        //}
+        public async Task<List<BookExel>> UploadDataBookExel(IFormFile file)
+        {
+            var list = new List<BookExel>();
             using (var stream = new MemoryStream())
             {
                 await file.CopyToAsync(stream);
@@ -330,34 +375,35 @@ namespace my_books.Data.Services
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                     var rowcount = worksheet.Dimension.Rows;
-                    for (int row = 1; row <= rowcount; row++)
+                    for (int row = 1; row <= rowcount - 1; row++)
                     {
                         if (row != 1)
                         {
-                            list.Add(new Book
-                            {
-                                Title = Convert.ToString(worksheet.Cells[row, 1].Value),
-                                Description = Convert.ToString(worksheet.Cells[row, 2].Value),
-                                Genre = Convert.ToString(worksheet.Cells[row, 3].Value),
-                                IsRead = Convert.ToBoolean(worksheet.Cells[row, 4].Value),
-                                DateRead = Convert.ToDateTime(worksheet.Cells[row, 5].Value),
-                                Rate = Convert.ToInt32(worksheet.Cells[row, 6].Value),
-                                DateAdded = Convert.ToDateTime(worksheet.Cells[row, 7].Value),
-                                CoverUrl = Convert.ToString(worksheet.Cells[row, 8].Value),
+                            BookExel book = new BookExel();
 
-                            });
+                            book.Title = Convert.ToString(worksheet.Cells[row, 1].Value);
+                            book.Description = Convert.ToString(worksheet.Cells[row, 2].Value);
+                            book.Genre = Convert.ToString(worksheet.Cells[row, 3].Value);
+                            book.IsRead = Convert.ToBoolean(worksheet.Cells[row, 4].Value);
+                            book.DateRead = Convert.ToDateTime(worksheet.Cells[row, 5].Value);
+                            book.Rate = Convert.ToInt32(worksheet.Cells[row, 6].Value);
+                            book.DateAdded = Convert.ToDateTime(worksheet.Cells[row, 7].Value);
+                            book.CoverUrl = Convert.ToString(worksheet.Cells[row, 8].Value);
+                            book.PublisherId = Convert.ToInt32(worksheet.Cells[row, 9].Value);
+                            var newbook = _mapper.Map<Book>(book);
+                            _context.Books.Add(newbook);
+                            _context.SaveChanges();
+                            list.Add(book);
                         }
-                    }
-                    foreach (var item in list)
-                    {
-                        _context.Books.Add(item);
-                        _context.SaveChanges();
-                    }
-
+                    }             
                 }
             }
-            return _mapper.Map<List<BookEcxel>>(list);
+            return list;
         }
+
+
+
+
 
 
 

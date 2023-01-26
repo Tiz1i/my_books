@@ -134,9 +134,9 @@ namespace my_books.Controllers
         }
 
         [HttpPost("UploadDataExelBook-by-exel")]
-        public async Task<List<BookEcxel>> UploadDataExelBook(IFormFile file)
+        public async Task<List<BookExel>> UploadDataBookExel(IFormFile file)
         {
-            var uploadDataExelBook = await _booksService.UploadDataExelBook(file);
+            var uploadDataExelBook = await _booksService.UploadDataBookExel(file);
             return uploadDataExelBook;
         }
     }

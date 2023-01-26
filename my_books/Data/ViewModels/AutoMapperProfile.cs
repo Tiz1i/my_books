@@ -16,7 +16,7 @@ namespace my_books.Data.ViewModels
             CreateMap<PublisherVM, Publisher>();
             CreateMap<BookAuthorVM, Book_Author>();
             CreateMap<Exel, Book>().ReverseMap();
-            CreateMap<BookEcxel, Book>().ReverseMap(); 
+            CreateMap<BookExel, Book>().ReverseMap(); 
         }
     }
 }
