@@ -1,4 +1,5 @@
 ﻿using my_books.Data.Models;
+using my_books.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,8 @@ namespace my_books.Data.ViewModels
         public int PublisherId { get; set; }
         public Publisher Publisher { get; set; }
         public List<Book_Author> Book_Authors { get; set; }
+        public BookStatus BookStatus { get; set; }
+
     }
     
 }

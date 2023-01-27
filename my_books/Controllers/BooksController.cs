@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using my_books.Data.Models;
 using my_books.Data.Services;
 using my_books.Data.ViewModels;
+using my_books.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -78,6 +79,13 @@ namespace my_books.Controllers
         public List<Book> FilteredBookByMapp(DateTime DateRead, DateTime DateAdded)
         {
             var filteredbook = _booksService.FilteredBook(DateRead, DateAdded);
+            return filteredbook;
+        }
+
+        [HttpGet("filter-books-by-bookstatus")]
+        public List<Book> FilteredBookStatus(DateTime DateRead, DateTime DateAdded, BookStatus status)
+        {
+            var filteredbook = _booksService.FilteredBookStatus(DateRead, DateAdded, status);
             return filteredbook;
         }
 

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using static my_books.Controllers.BooksController;
 using Fare;
 using OfficeOpenXml;
+using my_books.Enums;
 
 namespace my_books.Data.Services
 {
@@ -44,7 +45,8 @@ namespace my_books.Data.Services
                 Genre = book.Genre,
                 CoverUrl = book.CoverUrl,
                 DateAdded = DateTime.Now,
-                PublisherId = book.PublisherId
+                PublisherId = book.PublisherId,
+                BookStatus = Enums.BookStatus.NotPublished,
             };
             _context.Books.Add(_book);
             _context.SaveChanges();
@@ -73,7 +75,8 @@ namespace my_books.Data.Services
                 Genre = book.Genre,
                 CoverUrl = book.CoverUrl,
                 DateAdded = DateTime.Now,
-                PublisherId = book.PublisherId
+                PublisherId = book.PublisherId,
+                BookStatus = Enums.BookStatus.NotPublished,
             };
             _context.Books.Add(_book);
             _context.SaveChanges();
@@ -114,6 +117,22 @@ namespace my_books.Data.Services
             return _mapper.Map<List<Book>>(allbooks);
         }
 
+        public List<Book> FilteredBookStatus(DateTime DateRead, DateTime DateAdded, BookStatus status)
+
+        {
+            BookStatus s = status;
+            int value = (int)s;
+            var allbooks = _context.Books.Where(e => e.DateRead >= DateRead && e.DateAdded <= DateAdded && (int)e.BookStatus == value).ToList();
+            //foreach (var item in allbooks)
+            //{
+            //    BookStatus = BookStatus.NotPublished;
+            //    _context.Add(item);
+            //    _context.SaveChanges();
+            //}
+            return allbooks;
+        }
+    
+           
         public BookWithAuthorsVM GetBookById(int bookId)
         {
             var _bookWithAuthors = _context.Books.Where(n => n.Id == bookId).Select(book => new BookWithAuthorsVM()
@@ -126,7 +145,8 @@ namespace my_books.Data.Services
                 Genre = book.Genre,
                 CoverUrl = book.CoverUrl,
                 PublisherName = book.Publisher.Name,
-                AuthorNames = book.Book_Authors.Select(n => n.Author.FullName).ToList()
+                AuthorNames = book.Book_Authors.Select(n => n.Author.FullName).ToList(),
+                BookStatus = BookStatus.Intheproccesofpublication,
             }).FirstOrDefault();
 
             return _bookWithAuthors;
@@ -140,6 +160,7 @@ namespace my_books.Data.Services
         public ActionResult<BookWithAuthorsVM> GetAllBooksByIdByMapp(int bookId)
         {
             var _bookWithAuthors = _context.Books.Where(n => n.Id == bookId).FirstOrDefault();
+            _bookWithAuthors.BookStatus = BookStatus.Intheproccesofpublication;
             return _mapper.Map<BookWithAuthorsVM>(_bookWithAuthors);
         }
 
@@ -157,13 +178,15 @@ namespace my_books.Data.Services
                 CoverUrl = book.CoverUrl,
                 Book_Authors = book.Book_Authors,
                 PublisherId = book.PublisherId,
+                BookStatus = BookStatus.NotPublished,
             });
             return _bookthAuthorPublishers.ToList();
         }
 
-        public List<Book> GetNewBooksByMapp(int authorId, int publisherId)
+        public List<Book> GetNewBooksByMapp(int authorId, int publisherId, BookStatus BookStatus)
         {
             var _bookAuthorPublishers = _context.Books.Include(n => n.Book_Authors).Where(row => row.PublisherId == publisherId && row.Book_Authors.Any(i => i.AuthorId == authorId)).Select(book => new Book()).ToList();
+            BookStatus = Enums.BookStatus.NotPublished;
             return _mapper.Map<List<Book>>(_bookAuthorPublishers);
         }
 
@@ -179,6 +202,7 @@ namespace my_books.Data.Services
                 _book.Rate = book.IsRead ? book.Rate.Value : null;
                 _book.Genre = book.Genre;
                 _book.CoverUrl = book.CoverUrl;
+                _book.BookStatus = Enums.BookStatus.NotPublished;
 
                 _context.SaveChanges();
             }
@@ -188,7 +212,9 @@ namespace my_books.Data.Services
         public Book UpdateBookByIdByMapp(int bookId, BookVM book)
         {
             var _book = _context.Books.FirstOrDefault(n => n.Id == bookId);
+            _book.BookStatus = Enums.BookStatus.NotPublished;
             return _mapper.Map<Book>(_book);
+            
         }
 
         public void DeleteBookById(int bookId)
@@ -403,7 +429,6 @@ namespace my_books.Data.Services
             }
             return list;
         }
-
 
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using my_books.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -22,6 +23,6 @@ namespace my_books.Data.Models
         public int PublisherId { get; set; }
         public Publisher Publisher { get; set; }
         public List<Book_Author> Book_Authors { get; set; }
-
+        public BookStatus BookStatus { get; set; }
     }
 }
